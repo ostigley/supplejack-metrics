@@ -1,7 +1,7 @@
 <template>
   <div class="selectors">
-    <select v-for="collection in collections" v-on:change="console.log('changed')">
-      <option v-bind:value="collection">{{collection}}</option>
+    <select v-on:change="update" id='id'>
+      <option v-for="option in options" v-bind:value="option">{{option}}</option>
     </select>
   </div>
 </template>
@@ -9,9 +9,10 @@
 <script>
 export default {
   name: 'selectors',
-  data () {
-    return {
-      collections: this.$root.collections
+  props: ['options', 'id'],
+  methods: {
+    update (e) {
+      this.$root.updateSelection(this.id, e.target.value)
     }
   }
 }

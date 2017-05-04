@@ -1,10 +1,12 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import VueResource from 'vue-resource'
 import Dashboard from './Dashboard'
 import Selectors from './components/selector-menu'
 
 Vue.config.productionTip = false
+Vue.use(VueResource)
 
 /* eslint-disable no-new */
 new Vue({
@@ -13,11 +15,19 @@ new Vue({
   components: { Dashboard, Selectors },
   data: {
     collections: ['all', 'other'],
+    ranges: [1, 7, 28, 365],
     results: [],
     selection: {
-      facet: 'all',
-      dateRange: '1'
+      collection: 'all',
+      range: '1'
+    }
+  },
+  methods: {
+    updateSelection (field, value) {
+      this.$set(this.selection, field, value)
+      console.log(field, value)
     }
   },
   devtools: true
 })
+
