@@ -22,7 +22,7 @@ const boxTypes = [
   {
     title: 'Sets',
     key: 'sets',
-    description: 'Total public sets as of yesterday'
+    description: 'Total public sets on the API as of yesterday, for ALL collections'
   }
 ]
 

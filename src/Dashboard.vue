@@ -23,9 +23,11 @@ import fectchMetrics from './fetchers/fetch-metrics'
 
 export default {
   name: 'dashboard',
+
   components: {
     selectors, resultBox
   },
+
   data () {
     return {
       collections: this.$root.collections,
@@ -45,11 +47,13 @@ export default {
       }
     }
   },
+
   methods: {
     updateSelection (field, value) {
       this.$set(this.selection, field, value)
-      fectchMetrics.call(this, this.selection.collection, this.selection.range)
+      this.fetch()
     },
+
     dateRange (days = 1) {
       const endDate = this.formatDate(new Date() - 1000 * 60 * 60 * 24 * 1)
       let startDate = new Date(new Date() - 1000 * 60 * 60 * 24 * days)
@@ -60,35 +64,23 @@ export default {
 
     formatDate (date) {
       return dateFormat(date, 'yyyy, mm, dd').replace(/, /g, '-')
+    },
+
+    fetch () {
+      const { collection, range } = this.selection
+
+      fectchMetrics.call(this, collection, range)
     }
   },
-  mounted () {
-    this.dateRange()
-    const metricsUrl = `https://api.digitalnz.org/v3/metrics?${this.dateRange()}&metrics=record,view&facets=all`
 
+  mounted () {
     // Get facets and push to data storage
     this.$http.get('https://api.digitalnz.org/v3/metrics/facets')
       .then(function (response) {
         this.collections = ['all', ...response.body]
       })
 
-    // Get metrics and push to storage
-    this.$http.get(metricsUrl)
-      .then(function (response) {
-        const record = response.body[0].record[0]
-        const view = response.body[0].view[0]
-        this.$set(this.results, 'new', record.total_new_records)
-        this.$set(this.results, 'items', record.total_active_records)
-        this.$set(this.results, 'interactions',
-          view.total_source_clickthroughs + view.records_added_to_user_sets)
-        this.$set(this.results, 'impressions', view.total_views)
-      })
-
-    // Get total sets and push to storage
-    this.$http.get(metricsUrl.replace('metrics?', '/metrics/global?'))
-      .then(function (response) {
-        this.$set(this.results, 'sets', response.body[0].total_public_sets)
-      })
+    this.fetch()
   }
 
 }

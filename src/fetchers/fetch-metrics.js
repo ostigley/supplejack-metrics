@@ -13,5 +13,12 @@ export default function (collection, range) {
       this.$set(this.results, 'interactions', interactions)
       this.$set(this.results, 'impressions', impressions)
     })
+
+  if (!this.results.sets) {
+    this.$http.get(url.replace('metrics?', '/metrics/global?'))
+    .then(function (response) {
+      this.$set(this.results, 'sets', response.body[0].total_public_sets)
+    })
+  }
 }
 
