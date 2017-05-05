@@ -15,18 +15,7 @@ new Vue({
   components: { Dashboard, Selectors },
   data: {
     collections: ['all', 'other'],
-    ranges: [1, 7, 28, 365],
-    results: [],
-    selection: {
-      collection: 'all',
-      range: '1'
-    }
-  },
-  methods: {
-    updateSelection (field, value) {
-      this.$set(this.selection, field, value)
-      console.log(field, value)
-    }
+    ranges: [1, 7, 28, 365]
   },
   devtools: true
 })

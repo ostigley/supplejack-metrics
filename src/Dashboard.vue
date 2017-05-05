@@ -19,6 +19,8 @@ import selectors from './components/selector-menu'
 import resultBox from './components/result-box'
 import dateFormat from 'dateFormat'
 import { boxTypes } from './components/box-types'
+import fectchMetrics from './fetchers/fetch-metrics'
+
 export default {
   name: 'dashboard',
   components: {
@@ -28,7 +30,10 @@ export default {
     return {
       collections: this.$root.collections,
       ranges: this.$root.ranges,
-      collection: 'all',
+      selection: {
+        collection: 'all',
+        range: 1
+      },
       results: {
         new: null,
         items: null,
@@ -41,6 +46,10 @@ export default {
     }
   },
   methods: {
+    updateSelection (field, value) {
+      this.$set(this.selection, field, value)
+      fectchMetrics.call(this, this.selection.collection, this.selection.range)
+    },
     dateRange (days = 1) {
       const endDate = this.formatDate(new Date() - 1000 * 60 * 60 * 24 * 1)
       let startDate = new Date(new Date() - 1000 * 60 * 60 * 24 * days)

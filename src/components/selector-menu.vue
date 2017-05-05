@@ -12,7 +12,7 @@ export default {
   props: ['options', 'id'],
   methods: {
     update (e) {
-      this.$root.updateSelection(this.id, e.target.value)
+      this.$parent.updateSelection(this.id, e.target.value)
     }
   }
 }
